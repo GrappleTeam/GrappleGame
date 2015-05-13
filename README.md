@@ -11,4 +11,8 @@ In order to start working on the game, follow these instructions:
 
 1.  Install git, so you will be able to clone the current files
 2.  Navigate to the directory you want the files to be stored in with the command "cd"
-3.  Use the following command to download the code: git clone
+3.  Use the following command to download the code: "git clone https://github.com/GrappleTeam/GrappleGame.git"
+4.  Edit the code using your favorite text editor  
+
+To make the program run, wrap the whole program as an executable jar file. It can then be run in the terminal.
+
