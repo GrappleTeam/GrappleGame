@@ -1,4 +1,4 @@
-# GitGrappleGame  
+# GrappleGame  
 ------  
   
 Grapple is a platformer/shooter game written with a homemade 2d engine. It is written in Java, with the intent of getting it workable on Windows, OSx and Linux, as well as the Ouya game system. To accomplish this, we will have 3 different releases:
