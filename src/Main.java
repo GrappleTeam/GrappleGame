@@ -4,7 +4,7 @@ public class Main
 	{
 		boolean running = true;
 		
-		DisplayFrame df = new DisplayFrame();
+		Display_Frame df = new Display_Frame();
 		Thread th = new Thread(df.d); 
 		th.start();
 		while(running){

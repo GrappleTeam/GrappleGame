@@ -4,19 +4,19 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
-public class DisplayFrame{
+public class Display_Frame{
 	
 	static boolean levelChanged = false;
 	JFrame j = new JFrame();
 	Graphics dbGraphics;
 		
-	DisplayPanel d;
+	Display_Panel d;
 			
-	public DisplayFrame(){
+	public Display_Frame(){
 		j.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		j.setUndecorated(true);
 				
-		d = new DisplayPanel();
+		d = new Display_Panel();
 		d.setPreferredSize(new Dimension(900, 600));
         j.add(d);
 		

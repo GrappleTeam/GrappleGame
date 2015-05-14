@@ -112,7 +112,7 @@ public class Mover {
 			  //only check the block if the character is inside it.
 			  if(b.withinBounds(x, y, getWidth(), getHeight())){
 				  if(b.getType().equals("portal"))
-					  DisplayFrame.levelChanged=true;
+					  Display_Frame.levelChanged=true;
 				  if(xspeed==0){
 					  switch(yspeedSign()){
 					  	//moving down

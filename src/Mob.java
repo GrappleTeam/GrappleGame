@@ -39,7 +39,7 @@ public class Mob extends Mover {
   
   public BufferedImage getImage(String imageUrl){
 		try {
-			return ImageIO.read(DisplayPanel.class.getResource(imageUrl));
+			return ImageIO.read(Display_Panel.class.getResource(imageUrl));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

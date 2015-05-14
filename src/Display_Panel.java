@@ -21,7 +21,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
 
 
-public class DisplayPanel extends JPanel implements KeyListener, Runnable, MouseListener, MouseMotionListener{
+public class Display_Panel extends JPanel implements KeyListener, Runnable, MouseListener, MouseMotionListener{
 	
 	static final int standing = 0;
 	static final int walkingleft = 1;
@@ -81,7 +81,7 @@ public class DisplayPanel extends JPanel implements KeyListener, Runnable, Mouse
 		URL soundtrack1, soundtrack2;
 		URL currentSoundtrack;
 		
-	DisplayPanel(){
+	Display_Panel(){
 		
 		    inputList = getImage("graphics/InputList2.png");		    		    
 		    soundtrack1 = this.getClass().getClassLoader().getResource("sounds/Grapple - Main Menu Theme - 5-17-14, 10.57 PM.wav");
@@ -107,7 +107,7 @@ public class DisplayPanel extends JPanel implements KeyListener, Runnable, Mouse
 	
 	public BufferedImage getImage(String imageUrl){
 		try {
-			return ImageIO.read(DisplayPanel.class.getResource(imageUrl));
+			return ImageIO.read(Display_Panel.class.getResource(imageUrl));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
@@ -144,10 +144,10 @@ public class DisplayPanel extends JPanel implements KeyListener, Runnable, Mouse
 	public void run(){
 		
 		character.setXacc(0);
-		if(DisplayFrame.levelChanged){
+		if(Display_Frame.levelChanged){
 			changeLevel();
 		}
-		DisplayFrame.levelChanged = false;
+		Display_Frame.levelChanged = false;
 		
 		processInput();
 		
@@ -355,7 +355,7 @@ public class DisplayPanel extends JPanel implements KeyListener, Runnable, Mouse
 			case KeyEvent.VK_ESCAPE:
 			case KeyEvent.VK_Q:		System.exit(0);
 												
-			case KeyEvent.VK_L:		DisplayFrame.levelChanged = true;	break;
+			case KeyEvent.VK_L:		Display_Frame.levelChanged = true;	break;
 //			case KeyEvent.VK_M:		if(musicOn){
 //										musicOn = false;
 //										if(clip.isRunning())
