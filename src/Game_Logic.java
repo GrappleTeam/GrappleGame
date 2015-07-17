@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Toolkit;
@@ -21,12 +22,12 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JPanel;
 
 
-public class Display_Panel extends JPanel implements KeyListener, Runnable, MouseListener, MouseMotionListener{
+public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMotionListener{
 	
-	static final int standing = 0;
-	static final int walkingleft = 1;
-	static final int walkingright = 2;
-	static final int jumping = 3;
+	Display_Panel j;
+	public enum gamestate { main_screen, title_screen, gameplay_screen }
+	
+	public gamestate current_gamestate = gamestate.main_screen;
 	
 	int cycle = 0;
 	static int currentLevel;
@@ -49,7 +50,6 @@ public class Display_Panel extends JPanel implements KeyListener, Runnable, Mous
 	
 	//Image initialization 
 		BufferedImage window, background0, background1, characterImage, inputList;
-		
 		BufferedImage[] blockImages = {
 				getImage(new Block_Plain(0,0,0,0).getImageString()),
 				getImage(new Block_Death(0,0,0,0).getImageString()),
@@ -57,7 +57,6 @@ public class Display_Panel extends JPanel implements KeyListener, Runnable, Mous
 				getImage(new Block_Platform(0,0,0,0).getImageString()),
 				getImage(new Block_Portal(0,0,0,0).getImageString()),
 		};
-		
 		BufferedImage[] tileImages = {
 				getImage("graphics/Door01.png"),
 				getImage("graphics/GrassBlock01.png"),
@@ -68,24 +67,23 @@ public class Display_Panel extends JPanel implements KeyListener, Runnable, Mous
 				getImage("graphics/CornerBlockBottomLeft.png"),
 				getImage("graphics/BottomHorizontal.png"),
 		};
-		
 		BufferedImage[] BackgroundImages = {
 				getImage("graphics/sword-and-sworcery.png"),
 			    getImage("graphics/windows_xp_bliss-wide.jpg"),
 				getImage("graphics/whiteBackground.png"),
 		};
-		
-	//sound initialization
+//	//sound initialization
 //		AudioInputStream audioIn;
 //		Clip clip;
 		URL soundtrack1, soundtrack2;
 		URL currentSoundtrack;
 		
-	Display_Panel(){
-		
-		    inputList = getImage("graphics/InputList2.png");		    		    
-		    soundtrack1 = this.getClass().getClassLoader().getResource("sounds/Grapple - Main Menu Theme - 5-17-14, 10.57 PM.wav");
-		    soundtrack2 = this.getClass().getClassLoader().getResource("sounds/Grapple - City (Level 01) - 5-27-14, 2.52 AM.wav");
+	Game_Logic(){
+		j = new Display_Panel();
+		j.setPreferredSize(new Dimension(900, 600));
+	    inputList = getImage("graphics/InputList2.png");		    		    
+	    soundtrack1 = this.getClass().getClassLoader().getResource("sounds/Grapple - Main Menu Theme - 5-17-14, 10.57 PM.wav");
+	    soundtrack2 = this.getClass().getClassLoader().getResource("sounds/Grapple - City (Level 01) - 5-27-14, 2.52 AM.wav");
 		
 		currentLevel = 0;
 		levelArray = new ArrayList<Level>();
@@ -107,22 +105,22 @@ public class Display_Panel extends JPanel implements KeyListener, Runnable, Mous
 	
 	public BufferedImage getImage(String imageUrl){
 		try {
-			return ImageIO.read(Display_Panel.class.getResource(imageUrl));
+			return ImageIO.read(Game_Logic.class.getResource(imageUrl));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 	
-//	public void fillClip(){
+	public void fillClip(){
 //		try{
 //			clip = AudioSystem.getClip();
 //		}
 //	    catch (LineUnavailableException e) {
 //	         e.printStackTrace();
 //	    }
-//	}
-//	public void runSoundFile(URL soundUrl, int loops){
+	}
+	public void runSoundFile(URL soundUrl, int loops){
 //		try {
 //	         // Open an audio input stream.
 //	         audioIn = AudioSystem.getAudioInputStream(soundUrl);
@@ -139,7 +137,7 @@ public class Display_Panel extends JPanel implements KeyListener, Runnable, Mous
 //	      } catch (LineUnavailableException e) {
 //	         e.printStackTrace();
 //	      }
-//	}
+	}
 	
 	public void run(){
 		
@@ -169,16 +167,16 @@ public class Display_Panel extends JPanel implements KeyListener, Runnable, Mous
 			
 			
 		}
-		if(character.getX()>getWidth()-250 && character.getXspeed()>0 &&
+		if(character.getX()>j.getWidth()-250 && character.getXspeed()>0 &&
 				levelArray.get(currentLevel).getBackground().getX()+
-				levelArray.get(currentLevel).levelWidth*levelArray.get(currentLevel).blockSize>getWidth()){
+				levelArray.get(currentLevel).levelWidth*levelArray.get(currentLevel).blockSize>j.getWidth()){
 			
 			character.xlocked = true;
 			displacement = character.getXspeed();
 			if(levelArray.get(currentLevel).levelWidth*
-					levelArray.get(currentLevel).blockSize-displacement<getWidth())
+					levelArray.get(currentLevel).blockSize-displacement<j.getWidth())
 				displacement = levelArray.get(currentLevel).levelWidth*
-						levelArray.get(currentLevel).blockSize-displacement-getWidth();
+						levelArray.get(currentLevel).blockSize-displacement-j.getWidth();
 			for(Block b : levelArray.get(currentLevel).getLevelBlocks())
 				b.setX(b.getX()-character.getXspeed());
 			for(Tile b : levelArray.get(currentLevel).getLevelTiles())
@@ -201,20 +199,20 @@ public class Display_Panel extends JPanel implements KeyListener, Runnable, Mous
 		character.tetherMove();
 		character.xlocked = false;
 		character.ylocked = false;
-		character.checkWindowBoundaries(getWidth(), getHeight());
+		character.checkWindowBoundaries(j.getWidth(), j.getHeight());
 		character.checkBlockBoundaries(levelArray.get(currentLevel).getLevelBlocks());
 		
 		
 		
 		for(Mob c: levelArray.get(currentLevel).getLevelMobs()){
 			c.pattern();
-			c.checkWindowBoundaries(getWidth(), getHeight());
+			c.checkWindowBoundaries(j.getWidth(), j.getHeight());
 			c.checkBlockBoundaries(levelArray.get(currentLevel).getLevelBlocks());
 		}
 		
-		repaint();
+		j.repaint();
 		cycle++;
-		
+		//System.out.println(cycle);
 		try{
 			Thread.sleep(29);
 		}
@@ -223,7 +221,6 @@ public class Display_Panel extends JPanel implements KeyListener, Runnable, Mous
 		}
 
 	}
-	
 	public void changeLevel(){
 //		clip.stop();
 //		clip.close();
@@ -234,99 +231,7 @@ public class Display_Panel extends JPanel implements KeyListener, Runnable, Mous
 		currentSoundtrack = levelArray.get(currentLevel).getCurrentSoundtrack();
 		//runSoundFile(currentSoundtrack, 10);	
 	}
-
-	public void paintComponent(Graphics g){
-	     
-		super.paintComponent(g);
-			//drawing the background
-			if(levelArray.get(currentLevel).getBackground().getImage().equals("graphics/sword-and-sworcery.png"))
-		    	g.drawImage(BackgroundImages[0],
-		    			levelArray.get(currentLevel).getBackground().getX(), 
-		    			levelArray.get(currentLevel).getBackground().getY(),
-		    			null);
-			if(levelArray.get(currentLevel).getBackground().getImage().equals("graphics/windows_xp_bliss-wide.jpg"))
-			    g.drawImage(BackgroundImages[1],
-	    				levelArray.get(currentLevel).getBackground().getX(), 
-	    				levelArray.get(currentLevel).getBackground().getY(),
-	    				null);
-			if(levelArray.get(currentLevel).getBackground().getImage().equals("graphics/whiteBackground.png"))
-			    g.drawImage(BackgroundImages[2],
-	    				levelArray.get(currentLevel).getBackground().getX(), 
-	    				levelArray.get(currentLevel).getBackground().getY(),
-	    				null);
-						
-			//drawing the tiles
-			for(Tile t: levelArray.get(currentLevel).getLevelTiles()){
-				if(t.getImage().equals("door"))
-					g.drawImage(tileImages[0], t.getX(), t.getY(), this);
-				if(t.getImage().equals("grass"))
-					g.drawImage(tileImages[1], t.getX(), t.getY(), this);
-				if(t.getImage().equals("topright"))
-					g.drawImage(tileImages[2], t.getX(), t.getY(), this);
-				if(t.getImage().equals("topleft"))
-					g.drawImage(tileImages[3], t.getX(), t.getY(), this);
-				if(t.getImage().equals("horizontal"))
-					g.drawImage(tileImages[4], t.getX(), t.getY(), this);
-				if(t.getImage().equals("bottomright"))
-					g.drawImage(tileImages[5], t.getX(), t.getY(), this);
-				if(t.getImage().equals("bottomleft"))
-					g.drawImage(tileImages[6], t.getX(), t.getY(), this);
-				if(t.getImage().equals("bottomhorizontal"))
-					g.drawImage(tileImages[7], t.getX(), t.getY(), this);
-			}
-			
-			//drawing the blocks
-			for(Block b: levelArray.get(currentLevel).getLevelBlocks()){
-				if(b.getType().equals("standard"))
-					g.drawImage(blockImages[0], b.getX(), b.getY(), this);
-				if(b.getType().equals("deathblock"))
-					g.drawImage(blockImages[1], b.getX(), b.getY(), this);
-				if(b.getType().equals("slowblock"))
-					g.drawImage(blockImages[2], b.getX(), b.getY(), this);
-				if(b.getType().equals("platformblock"))
-					g.drawImage(blockImages[3], b.getX(), b.getY(), this);
-				if(b.getType().equals("portal"))
-					g.drawImage(blockImages[4], b.getX(), b.getY(), this);
-			}
-			
-			//drawing the character
-			if(character.jumpable==0){
-				if(character.xspeed <0) character.state=1;
-				if(character.xspeed==0) character.state=0;
-				if(character.xspeed <0) character.state=2;
-			}
-			else character.state=3;
-
-			g.drawImage(character.getSprite(), character.getX(), character.getY(), this);
-			//drawing the mobs
-			for(Mob m: levelArray.get(currentLevel).getLevelMobs())
-				g.drawImage(m.getSprite(), m.getX(), m.getY(), this);
-					
-			//drawing the grapple
-			if(character.tethered){
-				g.setColor(Color.black);
-				g.drawLine(character.getX()+character.getWidth()/2,
-						   character.getY()+character.getHeight()/2, 
-						   character.weaponArray.get(0).getHitX(), 
-						   character.weaponArray.get(0).getHitY());
-			}
-			
-			
-			//drawing the red aiming circle	
-				int charCenterX = character.getX()+(character.getWidth()/2);
-				int charCenterY = character.getY()+(character.getHeight()/2);
-
-				int r = -28;
-				
-				int vectorx = character.getCircleProjection(charCenterX, charCenterY, mouseX, mouseY, r);
-				int vectory = character.getCircleProjection(charCenterY, charCenterX, mouseY, mouseX, r);
-				
-				//create a vector by b-a for points
-				g.setColor(Color.RED);
-				g.fillOval(vectorx-5, vectory-5, 10, 10);
-				
-				//g.drawImage(testanimation[cycle%testanimation.length], 40, 40, this);
-	  }
+	
 	
 	//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	//KEYLISTENER
@@ -354,7 +259,13 @@ public class Display_Panel extends JPanel implements KeyListener, Runnable, Mous
 			
 			case KeyEvent.VK_ESCAPE:
 			case KeyEvent.VK_Q:		System.exit(0);
-												
+											
+			case KeyEvent.VK_T:		if(current_gamestate==gamestate.main_screen)
+										current_gamestate=gamestate.gameplay_screen;
+									else if(current_gamestate==gamestate.gameplay_screen)
+										current_gamestate=gamestate.main_screen;
+									break;
+									
 			case KeyEvent.VK_L:		Display_Frame.levelChanged = true;	break;
 //			case KeyEvent.VK_M:		if(musicOn){
 //										musicOn = false;
@@ -447,5 +358,121 @@ public class Display_Panel extends JPanel implements KeyListener, Runnable, Mous
 			e.consume();
 		}
 	//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+		 
+	public JPanel getJPanel(){ return j; }
+	class Display_Panel extends JPanel{
+		
+		public void paintComponent(Graphics g){
+		     
+			super.paintComponent(g);
+			
+			switch(current_gamestate){
+				case main_screen: 		draw_main_screen(g); break;
+				case gameplay_screen: 	draw_game_screen(g); break;
+			}
+				
+		}
+		
+		public void draw_game_screen(Graphics g){
+			
+		//drawing the background
+			if(levelArray.get(currentLevel).getBackground().getImage().equals("graphics/sword-and-sworcery.png"))
+		    	g.drawImage(BackgroundImages[0],
+		    			levelArray.get(currentLevel).getBackground().getX(), 
+		    			levelArray.get(currentLevel).getBackground().getY(),
+		    			null);
+			if(levelArray.get(currentLevel).getBackground().getImage().equals("graphics/windows_xp_bliss-wide.jpg"))
+			    g.drawImage(BackgroundImages[1],
+	    				levelArray.get(currentLevel).getBackground().getX(), 
+	    				levelArray.get(currentLevel).getBackground().getY(),
+	    				null);
+			if(levelArray.get(currentLevel).getBackground().getImage().equals("graphics/whiteBackground.png"))
+			    g.drawImage(BackgroundImages[2],
+	    				levelArray.get(currentLevel).getBackground().getX(), 
+	    				levelArray.get(currentLevel).getBackground().getY(),
+	    				null);
+						
+		//drawing the tiles
+			for(Tile t: levelArray.get(currentLevel).getLevelTiles()){
+				if(t.getImage().equals("door"))
+					g.drawImage(tileImages[0], t.getX(), t.getY(), this);
+				if(t.getImage().equals("grass"))
+					g.drawImage(tileImages[1], t.getX(), t.getY(), this);
+				if(t.getImage().equals("topright"))
+					g.drawImage(tileImages[2], t.getX(), t.getY(), this);
+				if(t.getImage().equals("topleft"))
+					g.drawImage(tileImages[3], t.getX(), t.getY(), this);
+				if(t.getImage().equals("horizontal"))
+					g.drawImage(tileImages[4], t.getX(), t.getY(), this);
+				if(t.getImage().equals("bottomright"))
+					g.drawImage(tileImages[5], t.getX(), t.getY(), this);
+				if(t.getImage().equals("bottomleft"))
+					g.drawImage(tileImages[6], t.getX(), t.getY(), this);
+				if(t.getImage().equals("bottomhorizontal"))
+					g.drawImage(tileImages[7], t.getX(), t.getY(), this);
+			}
+			
+		//drawing the blocks
+			for(Block b: levelArray.get(currentLevel).getLevelBlocks()){
+				if(b.getType().equals("standard"))
+					g.drawImage(blockImages[0], b.getX(), b.getY(), this);
+				if(b.getType().equals("deathblock"))
+					g.drawImage(blockImages[1], b.getX(), b.getY(), this);
+				if(b.getType().equals("slowblock"))
+					g.drawImage(blockImages[2], b.getX(), b.getY(), this);
+				if(b.getType().equals("platformblock"))
+					g.drawImage(blockImages[3], b.getX(), b.getY(), this);
+				if(b.getType().equals("portal"))
+					g.drawImage(blockImages[4], b.getX(), b.getY(), this);
+			}
+			
+		//drawing the character
+			if(character.jumpable==0){
+				if(character.xspeed <0) character.state=1;
+				if(character.xspeed==0) character.state=0;
+				if(character.xspeed <0) character.state=2;
+			}
+			else character.state=3;
+	
+			g.drawImage(character.getSprite(), character.getX(), character.getY(), this);
+			
+		//drawing the mobs
+			for(Mob m: levelArray.get(currentLevel).getLevelMobs())
+				g.drawImage(m.getSprite(), m.getX(), m.getY(), this);
+					
+		//drawing the grapple
+			if(character.tethered){
+				g.setColor(Color.black);
+				g.drawLine(character.getX()+character.getWidth()/2,
+						   character.getY()+character.getHeight()/2, 
+						   character.weaponArray.get(0).getHitX(), 
+						   character.weaponArray.get(0).getHitY());
+			}
+			
+			
+		//drawing the red aiming circle	
+			int charCenterX = character.getX()+(character.getWidth()/2);
+			int charCenterY = character.getY()+(character.getHeight()/2);
+
+			int r = -28;
+			
+			int vectorx = character.getCircleProjection(charCenterX, charCenterY, mouseX, mouseY, r);
+			int vectory = character.getCircleProjection(charCenterY, charCenterX, mouseY, mouseX, r);
+			
+			//create a vector by b-a for points
+			g.setColor(Color.RED);
+			g.fillOval(vectorx-5, vectory-5, 10, 10);
+			
+			//g.drawImage(testanimation[cycle%testanimation.length], 40, 40, this);
+		}
+		public void draw_main_screen(Graphics g){
+			g.drawImage(BackgroundImages[0],
+	    			levelArray.get(currentLevel).getBackground().getX(), 
+	    			levelArray.get(currentLevel).getBackground().getY(),
+	    			null);
+		}
+	}
 }
+
+
 

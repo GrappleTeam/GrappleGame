@@ -21,6 +21,8 @@ public class Mob extends Mover {
   protected int jumpHeight = 7;
   protected ArrayList<Weapon> weaponArray = new ArrayList<Weapon>();
   public int distanceToGun;
+  public enum mobstate { standing, walkingleft, walkingright, jumping }
+
   
   public Mob(String name, int damage, int health, int x, int y){
 	  this.name = name;
@@ -39,7 +41,7 @@ public class Mob extends Mover {
   
   public BufferedImage getImage(String imageUrl){
 		try {
-			return ImageIO.read(Display_Panel.class.getResource(imageUrl));
+			return ImageIO.read(Game_Logic.class.getResource(imageUrl));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

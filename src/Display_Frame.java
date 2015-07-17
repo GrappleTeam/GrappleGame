@@ -3,27 +3,30 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class Display_Frame{
 	
 	static boolean levelChanged = false;
 	JFrame j = new JFrame();
+
 	Graphics dbGraphics;
 		
-	Display_Panel d;
+	Game_Logic g;
+	JPanel d;
 			
 	public Display_Frame(){
 		j.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 		j.setUndecorated(true);
-				
-		d = new Display_Panel();
-		d.setPreferredSize(new Dimension(900, 600));
-        j.add(d);
+			
+		g = new Game_Logic();
+        j.add(g.getJPanel());
+        
 		
 		
-        	j.addMouseListener(d);
-        	j.addMouseMotionListener(d);
-			j.addKeyListener(d);
+        	j.addMouseListener(g);
+        	j.addMouseMotionListener(g);
+			j.addKeyListener(g);
 			
 			j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			j.pack();

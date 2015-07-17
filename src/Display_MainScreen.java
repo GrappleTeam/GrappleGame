@@ -20,7 +20,7 @@ public class Display_MainScreen extends JPanel implements KeyListener, Runnable,
 	
 	public BufferedImage getImage(String imageUrl){
 		try {
-			return ImageIO.read(Display_Panel.class.getResource(imageUrl));
+			return ImageIO.read(Display_MainScreen.class.getResource(imageUrl));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

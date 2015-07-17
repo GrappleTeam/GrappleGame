@@ -5,10 +5,10 @@ public class Main
 		boolean running = true;
 		
 		Display_Frame df = new Display_Frame();
-		Thread th = new Thread(df.d); 
+		Thread th = new Thread(df.g); 
 		th.start();
 		while(running){
-			df.d.run();
+			df.g.run();
 		}
 	}
 }
