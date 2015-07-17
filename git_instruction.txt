@@ -1,0 +1,7 @@
+git - 2 different version, local, local repository and master
+git pull - gets file changes from the master
+git status - tells you what is different between your local repository and your local files
+git add --all -will add any untrakced files to your commit
+git commit - push the added files and changes into the local repository
+git push - pushes files from the local repository into the master
+
