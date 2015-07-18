@@ -5,7 +5,7 @@ Grapple is a platformer/shooter game written with a homemade 2d engine. It is wr
 
 *   Alpha: Starting functionality on desktop systems
 *   Beta: Full functionality on desktop systems and porting to the Ouya
-*   Final: Monetization of the game
+*   Final: Release
 
 In order to start working on the game, follow these instructions:
 
