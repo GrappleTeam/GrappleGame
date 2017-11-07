@@ -8,12 +8,12 @@ public class Mob_ChuChu extends Mob{
 	
 	Mob_ChuChu(int x, int y){
 		super("ChuChu", damage, health, x, y);
-		this.sprite = getImage("graphics/Sprout01.png");
+		this.sprite = ImageUtils.getImage("graphics/Sprout01.png");
 	}
 	
 	Mob_ChuChu(int damage, int health, int x, int y){
 		super("ChuChu", damage, health, x, y);
-		this.sprite = getImage("graphics/Sprout01.png");
+		this.sprite = ImageUtils.getImage("graphics/Sprout01.png");
 	}
 	
 	@Override

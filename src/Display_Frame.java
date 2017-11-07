@@ -16,14 +16,12 @@ public class Display_Frame{
 	JPanel d;
 			
 	public Display_Frame(){
-		j.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+//		j.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		j.setUndecorated(true);
 			
 		g = new Game_Logic();
         j.add(g.getJPanel());
-        
-		
-		
+
         	j.addMouseListener(g);
         	j.addMouseMotionListener(g);
 			j.addKeyListener(g);

@@ -1,22 +1,14 @@
+import blocks.*;
+
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Level {
 	
@@ -39,7 +31,7 @@ public class Level {
 	int levelWidth;
 	int levelHeight;
 	
-	Block_Plain template;
+	BlockPlain template;
 
 	
 	//Constructor
@@ -86,7 +78,7 @@ public class Level {
 				populateLevel(levelString);
 				addBlocksToBlockArray(levelHeight,levelWidth);
 				addTilesToTileArray(levelHeight, levelWidth);
-//				mobArray.add(new Mob("mobius", 5, 50, 5, 7, 21, 1, 5, 
+//				mobArray.add(new Mob("mobius", 5, 50, 5, 7, 21, 1, 5,
 //						getImage("graphics/LittleManAnimation.png"),
 //						getImage("graphics/LittleManAnimation.png"),
 //						getImage("graphics/LittleManAnimation.png")));
@@ -150,19 +142,19 @@ public class Level {
 		for(int y=0;y<=height;y++){
 			for(int x=0;x<=width;x++){
 				if(level[y][x] == '1'){
-					blockArray.add(new Block_Plain(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
+					blockArray.add(new BlockPlain(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
 				}
 				if(level[y][x] == '2'){
-					blockArray.add(new Block_Death(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
+					blockArray.add(new BlockDeath(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
 				}
 				if(level[y][x] == '3'){
-					blockArray.add(new Block_Slow(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
+					blockArray.add(new BlockSlow(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
 				}
 				if(level[y][x] == 'P'){
-					blockArray.add(new Block_Platform(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
+					blockArray.add(new BlockPlatform(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
 				}
 				if(level[y][x] == 'h'){
-					blockArray.add(new Block_Portal(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
+					blockArray.add(new BlockPortal(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
 				}
 			}
 		}

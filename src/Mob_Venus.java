@@ -8,12 +8,12 @@ public class Mob_Venus extends Mob{
 	
 	Mob_Venus(int x, int y){
 		super("Venus", damage, health, x, y);
-		this.sprite = getImage("graphics/Plant02.png");
+		this.sprite = ImageUtils.getImage("graphics/Plant02.png");
 	}
 	
 	Mob_Venus(int damage, int health, int x, int y){
 		super("Venus", damage, health, x, y);
-		this.sprite = getImage("graphics/Plant02.png");
+		this.sprite = ImageUtils.getImage("graphics/Plant02.png");
 	}
 	
 	@Override

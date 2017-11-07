@@ -37,17 +37,6 @@ public class Mob extends Mover {
   public int getHealth()	{return this.health;};
   public void setName(String s)	{this.name = s;}
   public void setHealth(int h)	{this.health = h;}
-
-  
-  public BufferedImage getImage(String imageUrl){
-		try {
-			return ImageIO.read(Game_Logic.class.getResource(imageUrl));
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
   
   //Jumping ability
   public int getJumpHeight(){return jumpHeight;}
