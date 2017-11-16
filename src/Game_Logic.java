@@ -88,7 +88,7 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
         levelArray.add(new Level(4, new Tile(0, 0, "graphics/sword-and-sworcery.png"), soundtrack1));
         levelArray.add(new Level(5, new Tile(0, 0, "graphics/sword-and-sworcery.png"), soundtrack1));
 
-        character = new Mob_Player(5, 50, 50, 200);
+        character = new MobPlayer(5, 50, 50, 200);
         character.weaponArray.add(new GrappleGun());
 
 //		fillClip();

@@ -53,8 +53,8 @@ public class Level {
 				addBlocksToBlockArray(levelHeight,levelWidth);
 				addTilesToTileArray(levelHeight, levelWidth);
 				//adding enemies to the array
-				mobArray.add(new Mob_Venus(100, 200));
-				mobArray.add(new Mob_ChuChu(50, 5));
+				mobArray.add(new MobVenus(100, 200));
+				mobArray.add(new MobChuChu(50, 5));
 				break;
 			case 1:
 				blockSize = 24;
