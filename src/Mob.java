@@ -82,6 +82,8 @@ public class Mob extends Mover {
 				)
 			);
 	}
+
+
   public void tetherMove(){
 	  move();
 	  if(tethered){
