@@ -1,5 +1,5 @@
 class MobVenus(
-        name: String?,
+        name: String,
         damage: Int,
         health: Int,
         x: Int,
@@ -11,15 +11,10 @@ class MobVenus(
 //    private var health = 5
 
     init {
-//        if (health > MAX_HEALTH){
-//            health = MAX_HEALTH
-//        }
         this.sprite = ImageUtils.getImage("graphics/Plant02.png")
     }
 
-    internal constructor(x: Int, y: Int) : this("Venus", 0, 5, x, y) {
-        this.sprite = ImageUtils.getImage("graphics/Plant02.png")
-    }
+    internal constructor(x: Int, y: Int) : this("Venus", 0, 5, x, y)
 
     private var mod = 2
     private var tic = 0
@@ -29,7 +24,7 @@ class MobVenus(
             mod = -mod
             tic = 0
         }
-        setXspeed(mod)
+        xspeed = mod
         move()
         tic++
     }

@@ -89,7 +89,7 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
         levelArray.add(new Level(5, new Tile(0, 0, "graphics/sword-and-sworcery.png"), soundtrack1));
 
         character = new MobPlayer(5, 50, 50, 200);
-        character.weaponArray.add(new GrappleGun());
+        character.getWeaponArray().add(new GrappleGun());
 
 //		fillClip();
 //		currentSoundtrack = levelArray.get(currentLevel).getCurrentSoundtrack();
@@ -138,7 +138,7 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
         if (character.getX() < 250 && character.getXspeed() < 0 &&
                 levelArray.get(currentLevel).getBackground().getX() < 0) {
 
-            character.xlocked = true;
+            character.setXlocked(true);
             displacement = character.getXspeed();
             if (levelArray.get(currentLevel).getBackground().getX() - displacement > 0)
                 displacement = (levelArray.get(currentLevel).getBackground().getX() - displacement);
@@ -157,7 +157,7 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
                 levelArray.get(currentLevel).getBackground().getX() +
                         levelArray.get(currentLevel).levelWidth * levelArray.get(currentLevel).blockSize > j.getWidth()) {
 
-            character.xlocked = true;
+            character.setXlocked(true);
             displacement = character.getXspeed();
             if (levelArray.get(currentLevel).levelWidth *
                     levelArray.get(currentLevel).blockSize - displacement < j.getWidth())
@@ -183,8 +183,8 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
 
 
         character.tetherMove();
-        character.xlocked = false;
-        character.ylocked = false;
+        character.setXlocked(false);
+        character.setYlocked(false);
         character.checkWindowBoundaries(j.getWidth(), j.getHeight());
         character.checkBlockBoundaries(levelArray.get(currentLevel).getLevelBlocks());
 
@@ -246,8 +246,8 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
                 break;
 
             case KeyEvent.VK_SPACE:
-                character.setX(character.weaponArray.get(0).getHitX());
-                character.setY(character.weaponArray.get(0).getHitY());
+                character.setX(character.getWeaponArray().get(0).getHitX());
+                character.setY(character.getWeaponArray().get(0).getHitY());
                 character.setYspeed(0);
                 break;
 
@@ -327,11 +327,11 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
         mousePressed = true;
         mouseX = e.getX();
         mouseY = e.getY();
-        character.weaponArray.get(0).setHitX(mouseX);
-        character.weaponArray.get(0).setHitY(mouseY);
-        character.tethered = true;
+        character.getWeaponArray().get(0).setHitX(mouseX);
+        character.getWeaponArray().get(0).setHitY(mouseY);
+        character.setTethered(true);
 
-        character.distanceToGun = character.getDistance(character.getX(), character.getY(), character.weaponArray.get(0).getHitX(), character.weaponArray.get(0).getHitY());
+        character.setDistanceToGun(character.getDistance(character.getX(), character.getY(), character.getWeaponArray().get(0).getHitX(), character.getWeaponArray().get(0).getHitY()));
         e.consume();
     }
 
@@ -342,7 +342,7 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
         character.setXspeed(0);
         mouseX = e.getX();
         mouseY = e.getY();
-        character.tethered = false;
+        character.setTethered(false);
         e.consume();
     }
 
@@ -439,11 +439,11 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
         }
 
         private void drawingCharacter(Graphics g) {
-            if (character.jumpable == 0) {
-                if (character.xspeed < 0) character.state = 1;
-                if (character.xspeed == 0) character.state = 0;
-                if (character.xspeed < 0) character.state = 2;
-            } else character.state = 3;
+            if (character.getJumpable() == 0) {
+                if (character.getXspeed() < 0) character.setState(1);
+                if (character.getXspeed() == 0) character.setState(0);
+                if (character.getXspeed() < 0) character.setState(2);
+            } else character.setState(3);
 
             g.drawImage(character.getSprite(), character.getX(), character.getY(), this);
         }
@@ -493,12 +493,12 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
     }
 
     private void drawingGrapple(Graphics g) {
-        if (character.tethered) {
+        if (character.getTethered()) {
             g.setColor(Color.black);
             g.drawLine(character.getX() + character.getWidth() / 2,
                     character.getY() + character.getHeight() / 2,
-                    character.weaponArray.get(0).getHitX(),
-                    character.weaponArray.get(0).getHitY());
+                    character.getWeaponArray().get(0).getHitX(),
+                    character.getWeaponArray().get(0).getHitY());
         }
     }
 }

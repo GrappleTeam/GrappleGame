@@ -22,7 +22,7 @@ class MobChuChu(
             speedmod = -speedmod
             tic = 0
         }
-        setXspeed(speedmod)
+        xspeed = speedmod
         move()
         tic++
     }
