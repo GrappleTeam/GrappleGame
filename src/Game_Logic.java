@@ -188,7 +188,6 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
         character.checkWindowBoundaries(j.getWidth(), j.getHeight());
         character.checkBlockBoundaries(levelArray.get(currentLevel).getLevelBlocks());
 
-
         for (Mob c : levelArray.get(currentLevel).getLevelMobs()) {
             c.pattern();
             c.checkWindowBoundaries(j.getWidth(), j.getHeight());
