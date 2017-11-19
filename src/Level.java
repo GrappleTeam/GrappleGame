@@ -10,39 +10,41 @@ import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
+import static blocks.Block.Type.*;
+
 public class Level {
-	
+
 	private Tile background;
-	private ArrayList<Block> blockArray;
+	private ArrayList<IBlock> blockArray;
 	private ArrayList<Tile> tileArray;
 	private ArrayList<Mob> mobArray;
-	
-	Toolkit tk = Toolkit.getDefaultToolkit();  
-	int xSize = ((int) tk.getScreenSize().getWidth());  
+
+	Toolkit tk = Toolkit.getDefaultToolkit();
+	int xSize = ((int) tk.getScreenSize().getWidth());
 	int ySize = ((int) tk.getScreenSize().getHeight());
-	
+
 	int blockSize;
 	int thisLevelNumber;
 	private URL currentSoundtrack;
-	
+
 	char[][] level = new char[ySize/10][xSize/10];
 	//10 represents the smallest possible block size.
 	String levelString = null;
 	int levelWidth;
 	int levelHeight;
-	
-	BlockPlain template;
 
-	
+	Block template;
+
+
 	//Constructor
 	Level(int i, Tile background0, URL soundtrack){
-		blockArray = new ArrayList<Block>();
+		blockArray = new ArrayList<IBlock>();
 		tileArray = new ArrayList<Tile>();
 		mobArray = new ArrayList<Mob>();
 		this.background = background0;
 		thisLevelNumber=i;
 		currentSoundtrack = soundtrack;
-		
+
 		switch(i){
 			case 0:
 				blockSize = 24;
@@ -100,7 +102,7 @@ public class Level {
 			default:	System.out.println("Level error");
 		}
 	}
-	
+
 	public BufferedImage getImage(String imageUrl){
 		try {
 			return ImageIO.read(Game_Logic.class.getResource(imageUrl));
@@ -109,20 +111,20 @@ public class Level {
 			return null;
 		}
 	}
-	
+
 	public void populateLevel(String string){
 		String line = null;
 		int currentline = 0;
 		InputStream stream = this.getClass().getResourceAsStream(string);
 		Scanner input = new Scanner(stream);
 		char[][] temp = new char[70][70];
-			
+
 		//filling a temporary array
 		while (input.hasNextLine()){
 			line = input.nextLine();
 			levelHeight++;
-			levelWidth=line.length(); 
-			
+			levelWidth=line.length();
+
 			for(int a=0;a<levelWidth;a++){
 				temp[currentline][a] = line.charAt(a);
 		    }
@@ -134,27 +136,27 @@ public class Level {
 				level[levelHeight-a-1][b] = temp[a][b];
 		    }
 		}
-				
+
 		input.close();
 	}
-	
+
 	public void addBlocksToBlockArray(int height, int width){
 		for(int y=0;y<=height;y++){
 			for(int x=0;x<=width;x++){
 				if(level[y][x] == '1'){
-					blockArray.add(new BlockPlain(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
+					blockArray.add(new Block(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize, PLAIN));
 				}
 				if(level[y][x] == '2'){
-					blockArray.add(new BlockDeath(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
+					blockArray.add(new Block(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize, DEATH));
 				}
 				if(level[y][x] == '3'){
-					blockArray.add(new BlockSlow(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
+					blockArray.add(new Block(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize, SLOW));
 				}
 				if(level[y][x] == 'P'){
-					blockArray.add(new BlockPlatform(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
+					blockArray.add(new Block(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize, PLATFORM));
 				}
 				if(level[y][x] == 'h'){
-					blockArray.add(new BlockPortal(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize));
+					blockArray.add(new Block(blockSize*x, ySize-blockSize*(y+1), blockSize, blockSize, PORTAL));
 				}
 			}
 		}
@@ -195,8 +197,8 @@ public class Level {
 	public Tile getBackground(){
 		return background;
 	}
-	
-	public ArrayList<Block> getLevelBlocks(){
+
+	public ArrayList<IBlock> getLevelBlocks(){
 		return blockArray;
 	}
 	public ArrayList<Mob> getLevelMobs(){

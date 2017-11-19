@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import static blocks.Block.Type.*;
+
 
 public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMotionListener {
 
@@ -44,12 +46,13 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
 
     //Image initialization
     BufferedImage window, background0, background1, characterImage, inputList;
+String a =     new Block(0, 0, 0, 0, PLAIN).getImageString();
     BufferedImage[] blockImages = {
-            ImageUtils.getImage(new BlockPlain(0, 0, 0, 0).getImageString()),
-            ImageUtils.getImage(new BlockDeath(0, 0, 0, 0).getImageString()),
-            ImageUtils.getImage(new BlockSlow(0, 0, 0, 0).getImageString()),
-            ImageUtils.getImage(new BlockPlatform(0, 0, 0, 0).getImageString()),
-            ImageUtils.getImage(new BlockPortal(0, 0, 0, 0).getImageString()),
+            ImageUtils.getImage(a),
+            ImageUtils.getImage(new Block(0, 0, 0, 0, DEATH).getImageString()),
+            ImageUtils.getImage(new Block(0, 0, 0, 0, SLOW).getImageString()),
+            ImageUtils.getImage(new Block(0, 0, 0, 0, PLATFORM).getImageString()),
+            ImageUtils.getImage(new Block(0, 0, 0, 0, PORTAL).getImageString()),
     };
     BufferedImage[] tileImages = {
             ImageUtils.getImage("graphics/Door01.png"),
@@ -146,7 +149,7 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
             if (levelArray.get(currentLevel).getBackground().getX() > 0) {
                 displacement -= levelArray.get(currentLevel).getBackground().getX();
             }
-            for (Block b : levelArray.get(currentLevel).getLevelBlocks())
+            for (IBlock b : levelArray.get(currentLevel).getLevelBlocks())
                 b.setX(b.getX() - displacement);
             for (Tile b : levelArray.get(currentLevel).getLevelTiles())
                 b.setX(b.getX() - displacement);
@@ -163,7 +166,7 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
                     levelArray.get(currentLevel).blockSize - displacement < j.getWidth())
                 displacement = levelArray.get(currentLevel).levelWidth *
                         levelArray.get(currentLevel).blockSize - displacement - j.getWidth();
-            for (Block b : levelArray.get(currentLevel).getLevelBlocks())
+            for (IBlock b : levelArray.get(currentLevel).getLevelBlocks())
                 b.setX(b.getX() - character.getXspeed());
             for (Tile b : levelArray.get(currentLevel).getLevelTiles())
                 b.setX(b.getX() - character.getXspeed());
@@ -173,7 +176,7 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
 //				levelArray.get(currentLevel).getBackground().getY()+
 //				levelArray.get(currentLevel).levelHeight*levelArray.get(currentLevel).blockSize>=getHeight()){
 //			character.ylocked = true;
-//			for(blocks.Block b : levelArray.get(currentLevel).getLevelBlocks())
+//			for(blocks.IBlock b : levelArray.get(currentLevel).getLevelBlocks())
 //				b.setX(b.getX()-character.getYspeed());
 //			for(Tile b : levelArray.get(currentLevel).getLevelTiles())
 //				b.setX(b.getX()-character.getYspeed());
@@ -448,16 +451,16 @@ public class Game_Logic implements KeyListener, Runnable, MouseListener, MouseMo
         }
 
         private void drawingBlocks(Graphics g) {
-            for (Block b : levelArray.get(currentLevel).getLevelBlocks()) {
-                if (b.getType().equals("standard"))
+            for (IBlock b : levelArray.get(currentLevel).getLevelBlocks()) {
+                if (b.getType() == Block.Type.PLAIN)
                     g.drawImage(blockImages[0], b.getX(), b.getY(), this);
-                if (b.getType().equals("deathblock"))
+                if (b.getType()== Block.Type.DEATH)
                     g.drawImage(blockImages[1], b.getX(), b.getY(), this);
-                if (b.getType().equals("slowblock"))
+                if (b.getType()== Block.Type.SLOW)
                     g.drawImage(blockImages[2], b.getX(), b.getY(), this);
-                if (b.getType().equals("platformblock"))
+                if (b.getType()== Block.Type.PLATFORM)
                     g.drawImage(blockImages[3], b.getX(), b.getY(), this);
-                if (b.getType().equals("portal"))
+                if (b.getType()== Block.Type.PORTAL)
                     g.drawImage(blockImages[4], b.getX(), b.getY(), this);
             }
         }

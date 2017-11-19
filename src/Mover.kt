@@ -1,3 +1,4 @@
+import blocks.IBlock
 import blocks.Block
 
 import java.awt.image.BufferedImage
@@ -38,9 +39,7 @@ open class Mover {
         }
     }
 
-    //Boundary Checkers=============================================
     fun move() {
-
         xspeed += xacc
         if (xspeed > topXSpeed) xspeed = topXSpeed
         if (xspeed < -topXSpeed) xspeed = -topXSpeed
@@ -105,11 +104,11 @@ open class Mover {
         }
     }
 
-    fun checkBlockBoundaries(blocks: ArrayList<Block>) {
+    fun checkBlockBoundaries(blocks: ArrayList<IBlock>) {
         for (b in blocks) {
             //only check the block if the character is inside it.
             if (b.withinBounds(x, y, width, height)) {
-                if (b.type == "portal")
+                if (b.type == Block.Type.PORTAL)
                     Display_Frame.levelChanged = true
                 if (xspeed == 0) {
                     when (yspeedSign()) {
@@ -126,7 +125,7 @@ open class Mover {
         }
     }
 
-    private fun performCollisionHeadingRight(b: Block) {
+    private fun performCollisionHeadingRight(b: IBlock) {
         when (yspeedSign()) {
             0 -> collisionEast(b)
             1 -> collisionSouthEast(b)
@@ -134,7 +133,7 @@ open class Mover {
         }
     }
 
-    private fun performCollisionHeadingLeft(b: Block) {
+    private fun performCollisionHeadingLeft(b: IBlock) {
         when (yspeedSign()) {
             0 -> collisionWest(b)
             1 -> collisionSouthWest(b)
@@ -142,7 +141,7 @@ open class Mover {
         }
     }
 
-    private fun collisionSouthEast(b: Block) {
+    private fun collisionSouthEast(b: IBlock) {
         if (this.withinXparam(b)) {
             collisionNorth(b)
         } else if (this.withinYparam(b)) {
@@ -154,7 +153,7 @@ open class Mover {
         }
     }
 
-    private fun collisionNorthEast(b: Block) {
+    private fun collisionNorthEast(b: IBlock) {
         if (this.withinXparam(b)) {
             collisionSouth(b)
         } else if (this.withinYparam(b)) {
@@ -166,7 +165,7 @@ open class Mover {
         }
     }
 
-    private fun collisionSouthWest(b: Block) {
+    private fun collisionSouthWest(b: IBlock) {
         if (this.withinXparam(b)) {
             collisionNorth(b)
         } else if (this.withinYparam(b)) {
@@ -177,7 +176,7 @@ open class Mover {
             collisionWest(b)
     }
 
-    private fun collisionNorthWest(b: Block) {
+    private fun collisionNorthWest(b: IBlock) {
         if (this.withinXparam(b)) {
             collisionSouth(b)
         } else if (this.withinYparam(b)) {
@@ -189,7 +188,7 @@ open class Mover {
         }
     }
 
-    private fun collisionEast(b: Block) {
+    private fun collisionEast(b: IBlock) {
         if (!b.isPlatform) {
             x = b.x - b.width
             xspeed = 0
@@ -197,7 +196,7 @@ open class Mover {
         }
     }
 
-    private fun collisionWest(b: Block) {
+    private fun collisionWest(b: IBlock) {
         if (!b.isPlatform) {
             x = b.x + b.width
             xspeed = 0
@@ -205,26 +204,26 @@ open class Mover {
         }
     }
 
-    private fun collisionSouth(b: Block) {
+    private fun collisionSouth(b: IBlock) {
         if (!b.isPlatform) {
             y = b.y + b.height
             yspeed = 0
         }
     }
 
-    private fun collisionNorth(b: Block) {
-        if (b.type == "slowblock")
+    private fun collisionNorth(b: IBlock) {
+        if (b.type == Block.Type.SLOW)
             xspeed = xspeed / 3
         y = b.y - this.height
         yspeed = -yacc
         jumpable = 0
     }
 
-    private fun withinXparam(b: Block): Boolean {
+    private fun withinXparam(b: IBlock): Boolean {
         return b.x < oldX + this.width && oldX < b.x + b.width
     }
 
-    private fun withinYparam(b: Block): Boolean {
+    private fun withinYparam(b: IBlock): Boolean {
         if (b.isPlatform)
             return oldY + this.height - yacc < b.y
                     && b.y < oldY + this.height
