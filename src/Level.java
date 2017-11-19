@@ -105,7 +105,7 @@ public class Level {
 
 	public BufferedImage getImage(String imageUrl){
 		try {
-			return ImageIO.read(Game_Logic.class.getResource(imageUrl));
+			return ImageIO.read(GameLogic.class.getResource(imageUrl));
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

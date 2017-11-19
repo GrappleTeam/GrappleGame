@@ -109,7 +109,7 @@ open class Mover {
             //only check the block if the character is inside it.
             if (b.withinBounds(x, y, width, height)) {
                 if (b.type == Block.Type.PORTAL)
-                    Display_Frame.levelChanged = true
+                    DisplayFrame.levelChanged = true
                 if (xspeed == 0) {
                     when (yspeedSign()) {
                         1 -> collisionNorth(b)
