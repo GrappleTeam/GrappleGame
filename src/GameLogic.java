@@ -1,4 +1,11 @@
-import blocks.*;
+import common.Block;
+import common.IBlock;
+import common.Tile;
+import levels.Level;
+import mob.Mob;
+import mob.MobPlayer;
+import resources.graphics.ImageUtils;
+import weapons.GrappleGun;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,10 +21,14 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import static blocks.Block.Type.*;
+import static common.Block.Type.*;
 
 
-public class GameLogic implements KeyListener, Runnable, MouseListener, MouseMotionListener {
+public class GameLogic
+        implements KeyListener,
+        Runnable,
+        MouseListener,
+        MouseMotionListener {
 
     DisplayPanel j;
 
@@ -50,19 +61,19 @@ public class GameLogic implements KeyListener, Runnable, MouseListener, MouseMot
             ImageUtils.getImage(new Block(0, 0, 0, 0, PORTAL).getImageString()),
     };
     static BufferedImage[] tileImages = {
-            ImageUtils.getImage("graphics/Door01.png"),
-            ImageUtils.getImage("graphics/GrassBlock01.png"),
-            ImageUtils.getImage("graphics/CornerBlockTopRight.png"),
-            ImageUtils.getImage("graphics/CornerBlockTopLeft.png"),
-            ImageUtils.getImage("graphics/Horizontal.png"),
-            ImageUtils.getImage("graphics/CornerBlockBottomRight.png"),
-            ImageUtils.getImage("graphics/CornerBlockBottomLeft.png"),
-            ImageUtils.getImage("graphics/BottomHorizontal.png"),
+            ImageUtils.getImage("Door01.png"),
+            ImageUtils.getImage("GrassBlock01.png"),
+            ImageUtils.getImage("CornerBlockTopRight.png"),
+            ImageUtils.getImage("CornerBlockTopLeft.png"),
+            ImageUtils.getImage("Horizontal.png"),
+            ImageUtils.getImage("CornerBlockBottomRight.png"),
+            ImageUtils.getImage("CornerBlockBottomLeft.png"),
+            ImageUtils.getImage("BottomHorizontal.png"),
     };
     static BufferedImage[] BackgroundImages = {
-            ImageUtils.getImage("graphics/sword-and-sworcery.png"),
-            ImageUtils.getImage("graphics/windows_xp_bliss-wide.jpg"),
-            ImageUtils.getImage("graphics/whiteBackground.png"),
+            ImageUtils.getImage("sword-and-sworcery.png"),
+            ImageUtils.getImage("windows_xp_bliss-wide.jpg"),
+            ImageUtils.getImage("whiteBackground.png"),
     };
     //	//sound initialization
 //		AudioInputStream audioIn;
@@ -73,18 +84,18 @@ public class GameLogic implements KeyListener, Runnable, MouseListener, MouseMot
     GameLogic() {
         j = new DisplayPanel();
         j.setPreferredSize(new Dimension(900, 600));
-        inputList = ImageUtils.getImage("graphics/InputList2.png");
-        soundtrack1 = this.getClass().getClassLoader().getResource("sounds/Grapple - Main Menu Theme - 5-17-14, 10.57 PM.wav");
-        soundtrack2 = this.getClass().getClassLoader().getResource("sounds/Grapple - City (Level 01) - 5-27-14, 2.52 AM.wav");
+        inputList = ImageUtils.getImage("InputList2.png");
+        soundtrack1 = this.getClass().getClassLoader().getResource("resources/sounds/Grapple - Main Menu Theme - 5-17-14, 10.57 PM.wav");
+        soundtrack2 = this.getClass().getClassLoader().getResource("resources/sounds/Grapple - City (Level 01) - 5-27-14, 2.52 AM.wav");
 
         currentLevel = 0;
         levelArray = new ArrayList<>();
-        levelArray.add(new Level(0, new Tile(0, 0, "graphics/whiteBackground.png"), soundtrack1));
-        levelArray.add(new Level(1, new Tile(0, 0, "graphics/windows_xp_bliss-wide.jpg"), soundtrack2));
-        levelArray.add(new Level(2, new Tile(0, 0, "graphics/whiteBackground.png"), soundtrack1));
-        levelArray.add(new Level(3, new Tile(0, 0, "graphics/windows_xp_bliss-wide.jpg"), soundtrack1));
-        levelArray.add(new Level(4, new Tile(0, 0, "graphics/sword-and-sworcery.png"), soundtrack1));
-        levelArray.add(new Level(5, new Tile(0, 0, "graphics/sword-and-sworcery.png"), soundtrack1));
+        levelArray.add(new Level(0, new Tile(0, 0, "whiteBackground.png"), soundtrack1));
+        levelArray.add(new Level(1, new Tile(0, 0, "windows_xp_bliss-wide.jpg"), soundtrack2));
+        levelArray.add(new Level(2, new Tile(0, 0, "whiteBackground.png"), soundtrack1));
+        levelArray.add(new Level(3, new Tile(0, 0, "windows_xp_bliss-wide.jpg"), soundtrack1));
+        levelArray.add(new Level(4, new Tile(0, 0, "sword-and-sworcery.png"), soundtrack1));
+        levelArray.add(new Level(5, new Tile(0, 0, "sword-and-sworcery.png"), soundtrack1));
 
         character = new MobPlayer(5, 50, 50, 200);
         character.getWeaponArray().add(new GrappleGun());
@@ -153,14 +164,14 @@ public class GameLogic implements KeyListener, Runnable, MouseListener, MouseMot
         }
         if (character.getX() > j.getWidth() - 250 && character.getXspeed() > 0 &&
                 levelArray.get(currentLevel).getBackground().getX() +
-                        levelArray.get(currentLevel).levelWidth * levelArray.get(currentLevel).blockSize > j.getWidth()) {
+                        levelArray.get(currentLevel).getLevelWidth() * levelArray.get(currentLevel).getBlockSize() > j.getWidth()) {
 
             character.setXlocked(true);
             displacement = character.getXspeed();
-            if (levelArray.get(currentLevel).levelWidth *
-                    levelArray.get(currentLevel).blockSize - displacement < j.getWidth())
-                displacement = levelArray.get(currentLevel).levelWidth *
-                        levelArray.get(currentLevel).blockSize - displacement - j.getWidth();
+            if (levelArray.get(currentLevel).getLevelWidth() *
+                    levelArray.get(currentLevel).getBlockSize() - displacement < j.getWidth())
+                displacement = levelArray.get(currentLevel).getLevelWidth() *
+                        levelArray.get(currentLevel).getBlockSize() - displacement - j.getWidth();
             for (IBlock b : levelArray.get(currentLevel).getLevelBlocks())
                 b.setX(b.getX() - character.getXspeed());
             for (Tile b : levelArray.get(currentLevel).getLevelTiles())
@@ -171,7 +182,7 @@ public class GameLogic implements KeyListener, Runnable, MouseListener, MouseMot
 //				levelArray.get(currentLevel).getBackground().getY()+
 //				levelArray.get(currentLevel).levelHeight*levelArray.get(currentLevel).blockSize>=getHeight()){
 //			character.ylocked = true;
-//			for(blocks.IBlock b : levelArray.get(currentLevel).getLevelBlocks())
+//			for(common.IBlock b : levelArray.get(currentLevel).getLevelBlocks())
 //				b.setX(b.getX()-character.getYspeed());
 //			for(Tile b : levelArray.get(currentLevel).getLevelTiles())
 //				b.setX(b.getX()-character.getYspeed());
@@ -416,18 +427,18 @@ public class GameLogic implements KeyListener, Runnable, MouseListener, MouseMot
     }
 
     private void drawingBackground(Graphics g) {
-        if (levelArray.get(currentLevel).getBackground().getImage().equals("graphics/sword-and-sworcery.png")) {
+        if (levelArray.get(currentLevel).getBackground().getImage().equals("sword-and-sworcery.png")) {
             g.drawImage(BackgroundImages[0],
                     levelArray.get(currentLevel).getBackground().getX(),
                     levelArray.get(currentLevel).getBackground().getY(),
                     null);
         }
-        if (levelArray.get(currentLevel).getBackground().getImage().equals("graphics/windows_xp_bliss-wide.jpg"))
+        if (levelArray.get(currentLevel).getBackground().getImage().equals("windows_xp_bliss-wide.jpg"))
             g.drawImage(BackgroundImages[1],
                     levelArray.get(currentLevel).getBackground().getX(),
                     levelArray.get(currentLevel).getBackground().getY(),
                     null);
-        if (levelArray.get(currentLevel).getBackground().getImage().equals("graphics/whiteBackground.png"))
+        if (levelArray.get(currentLevel).getBackground().getImage().equals("whiteBackground.png"))
             g.drawImage(BackgroundImages[2],
                     levelArray.get(currentLevel).getBackground().getX(),
                     levelArray.get(currentLevel).getBackground().getY(),
