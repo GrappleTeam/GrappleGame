@@ -28,9 +28,10 @@ open class Block(
             this(x, y, r.width, r.height, r.type)
 
     override fun withinBounds(testX: Int, testY: Int, testWidth: Int, testHeight: Int): Boolean {
-        return if (x < testX + testWidth && testX < x + width && y < testY + testHeight && testY < y + height) {
-            true
-        } else false
+        return x < testX + testWidth
+                && testX < x + width
+                && y < testY + testHeight
+                && testY < y + height
     }
 
     enum class Type {

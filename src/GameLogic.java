@@ -7,28 +7,17 @@ import mob.MobPlayer;
 import resources.graphics.ImageUtils;
 import weapons.GrappleGun;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
 
-import javax.swing.JPanel;
-
 import static common.Block.Type.*;
 
 
-public class GameLogic
-        implements KeyListener,
-        Runnable,
-        MouseListener,
-        MouseMotionListener {
+public class GameLogic implements Runnable {
 
     DisplayPanel j;
 
@@ -225,70 +214,6 @@ public class GameLogic
         //runSoundFile(currentSoundtrack, 10);
     }
 
-
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    //KEYLISTENER
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-    public void keyPressed(KeyEvent k) {
-        switch (k.getKeyCode()) {
-
-            case KeyEvent.VK_W:        //-------------
-            case KeyEvent.VK_UP:
-                upButtonPressed = true;
-                break;
-
-            case KeyEvent.VK_A:        //-------------
-            case KeyEvent.VK_LEFT:
-                leftButtonPressed = true;
-                break;
-
-            case KeyEvent.VK_D:        //-------------
-            case KeyEvent.VK_RIGHT:
-                rightButtonPressed = true;
-                break;
-
-            case KeyEvent.VK_S:        //-------------
-            case KeyEvent.VK_DOWN:
-                downButtonPressed = true;
-                break;
-
-            case KeyEvent.VK_SPACE:
-                character.setX(character.getWeaponArray().get(0).getHitX());
-                character.setY(character.getWeaponArray().get(0).getHitY());
-                character.setYspeed(0);
-                break;
-
-            case KeyEvent.VK_ESCAPE:
-            case KeyEvent.VK_Q:
-                System.exit(0);
-
-            case KeyEvent.VK_T:
-                if (current_gamestate == gamestate.main_screen)
-                    current_gamestate = gamestate.gameplay_screen;
-                else if (current_gamestate == gamestate.gameplay_screen)
-                    current_gamestate = gamestate.main_screen;
-                break;
-
-            case KeyEvent.VK_L:
-                DisplayFrame.Companion.setLevelChanged(true);
-                break;
-//			case KeyEvent.VK_M:		if(musicOn){
-//										musicOn = false;
-//										if(clip.isRunning())
-//											clip.stop();
-//									}
-//									else{
-//										musicOn = true;
-//										clip.start();
-//									}
-//									break;
-
-            default:
-                break;
-        }
-    }
-
     public enum gamestate {main_screen, title_screen, gameplay_screen}
 
     public static gamestate current_gamestate = gamestate.main_screen;
@@ -300,87 +225,6 @@ public class GameLogic
         if (downButtonPressed) character.setYspeed(character.getYspeed() + 2);
     }
 
-    public void keyReleased(KeyEvent k) {
-        switch (k.getKeyCode()) {
-
-            case KeyEvent.VK_W:
-            case KeyEvent.VK_UP:
-                upButtonPressed = false;
-                break;
-
-            case KeyEvent.VK_A:
-            case KeyEvent.VK_LEFT:
-                leftButtonPressed = false;
-                character.setXacc(0);
-                break;
-
-            case KeyEvent.VK_D:
-            case KeyEvent.VK_RIGHT:
-                rightButtonPressed = false;
-                character.setXacc(0);
-                break;
-
-            case KeyEvent.VK_S:
-            case KeyEvent.VK_DOWN:
-                downButtonPressed = false;
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void keyTyped(KeyEvent k) {
-    }
-
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    //MOUSELISTENER
-    //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-    public void mousePressed(MouseEvent e) {
-        mousePressed = true;
-        mouseX = e.getX();
-        mouseY = e.getY();
-        character.getWeaponArray().get(0).setHitX(mouseX);
-        character.getWeaponArray().get(0).setHitY(mouseY);
-        character.setTethered(true);
-
-        character.setDistanceToGun(character.getDistance(character.getX(), character.getY(), character.getWeaponArray().get(0).getHitX(), character.getWeaponArray().get(0).getHitY()));
-        e.consume();
-    }
-
-    public void mouseReleased(MouseEvent e) {
-        mousePressed = false;
-        character.setYspeed(0);
-        character.setXacc(0);
-        character.setXspeed(0);
-        mouseX = e.getX();
-        mouseY = e.getY();
-        character.setTethered(false);
-        e.consume();
-    }
-
-    public void mouseClicked(MouseEvent e) {
-        mouseX = e.getX();
-        mouseY = e.getY();
-        e.consume();
-    }
-
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    public void mouseMoved(MouseEvent e) {
-        mouseX = e.getX();
-        mouseY = e.getY();
-        e.consume();
-    }
     //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
     public JPanel getJPanel() {
