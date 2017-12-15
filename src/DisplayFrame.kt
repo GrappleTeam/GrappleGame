@@ -1,7 +1,4 @@
-import java.awt.Graphics
-
 import javax.swing.JFrame
-import javax.swing.JPanel
 
 class DisplayFrame {
     private var j = JFrame()

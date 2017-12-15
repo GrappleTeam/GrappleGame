@@ -1,7 +1,5 @@
 package common
 
-import common.Block
-
 interface IBlock {
     val type: Block.Type
     var x: Int

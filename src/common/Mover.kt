@@ -1,7 +1,8 @@
 package common
 
+import DisplayFrame
 import java.awt.image.BufferedImage
-import java.util.ArrayList
+import java.util.*
 
 open class Mover {
     var jumpable = 0

@@ -32,7 +32,6 @@ class MobChuChu(
     }
 
     companion object {
-
         private val damage = 3
         private val health = 5
     }

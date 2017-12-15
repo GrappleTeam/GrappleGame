@@ -1,8 +1,8 @@
 package mob
 
-import weapons.Weapon
-import java.util.ArrayList
 import common.Mover
+import weapons.Weapon
+import java.util.*
 
 open class Mob(
         var name: String?,
