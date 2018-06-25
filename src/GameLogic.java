@@ -132,63 +132,75 @@ public class GameLogic implements Runnable {
 
         processInput();
 
+        Level level = levelArray.get(currentLevel);
+        Tile background = level.getBackground();
         if (character.getX() < 250 && character.getXspeed() < 0 &&
-                levelArray.get(currentLevel).getBackground().getX() < 0) {
+                background.getX() < 0) {
 
             character.setXlocked(true);
             displacement = character.getXspeed();
-            if (levelArray.get(currentLevel).getBackground().getX() - displacement > 0)
-                displacement = (levelArray.get(currentLevel).getBackground().getX() - displacement);
-            levelArray.get(currentLevel).getBackground().setX(levelArray.get(currentLevel).getBackground().getX() - displacement);
-            if (levelArray.get(currentLevel).getBackground().getX() > 0) {
-                displacement -= levelArray.get(currentLevel).getBackground().getX();
+            if (background.getX() - displacement > 0)
+                displacement = (background.getX() - displacement);
+            background.setX(background.getX() - displacement);
+            if (background.getX() > 0) {
+                displacement -= background.getX();
             }
-            for (IBlock b : levelArray.get(currentLevel).getLevelBlocks())
+            for (IBlock b : level.getLevelBlocks())
                 b.setX(b.getX() - displacement);
-            for (Tile b : levelArray.get(currentLevel).getLevelTiles())
+            for (Tile b : level.getLevelTiles())
                 b.setX(b.getX() - displacement);
 
 
         }
-        if (character.getX() > j.getWidth() - 250 && character.getXspeed() > 0 &&
-                levelArray.get(currentLevel).getBackground().getX() +
-                        levelArray.get(currentLevel).getLevelWidth() * levelArray.get(currentLevel).getBlockSize() > j.getWidth()) {
+        boolean b1 = background.getX() + level.getLevelWidth() * level.getBlockSize() > j.getWidth();
+        if (character.getX() > j.getWidth() - 250
+                && character.getXspeed() > 0
+                && b1) {
 
             character.setXlocked(true);
             displacement = character.getXspeed();
-            if (levelArray.get(currentLevel).getLevelWidth() *
-                    levelArray.get(currentLevel).getBlockSize() - displacement < j.getWidth())
-                displacement = levelArray.get(currentLevel).getLevelWidth() *
-                        levelArray.get(currentLevel).getBlockSize() - displacement - j.getWidth();
-            for (IBlock b : levelArray.get(currentLevel).getLevelBlocks())
+            if (level.getLevelWidth() * level.getBlockSize() - displacement < j.getWidth()) {
+                displacement = level.getLevelWidth() * level.getBlockSize() - displacement - j.getWidth();
+            }
+            for (IBlock b : level.getLevelBlocks()) {
                 b.setX(b.getX() - character.getXspeed());
-            for (Tile b : levelArray.get(currentLevel).getLevelTiles())
-                b.setX(b.getX() - character.getXspeed());
-            levelArray.get(currentLevel).getBackground().setX(levelArray.get(currentLevel).getBackground().getX() - character.getXspeed());
-        }
-//		if(character.getY()<getHeight()-250 && 
-//				levelArray.get(currentLevel).getBackground().getY()+
-//				levelArray.get(currentLevel).levelHeight*levelArray.get(currentLevel).blockSize>=getHeight()){
-//			character.ylocked = true;
-//			for(common.IBlock b : levelArray.get(currentLevel).getLevelBlocks())
-//				b.setX(b.getX()-character.getYspeed());
-//			for(Tile b : levelArray.get(currentLevel).getLevelTiles())
-//				b.setX(b.getX()-character.getYspeed());
-//			levelArray.get(currentLevel).getBackground().setY(levelArray.get(currentLevel).getBackground().getY()-character.getYspeed());
-//			//character.setX(character.getX()-character.getXspeed());
-//		}
 
+            }
+            for (Tile b : level.getLevelTiles()) {
+                b.setX(b.getX() - character.getXspeed());
+            }
+            background.setX(background.getX() - character.getXspeed());
+        }
+//        boolean b2 = background.getY() + level.getLevelHeight() * level.getBlockSize() > j.getHeight();
+//        if (character.getY() > j.getHeight() - 250
+//                && character.getYspeed() > 0
+//                && b2) {
+//
+//            character.setYlocked(true);
+//            displacement = character.getYspeed();
+//            if (level.getLevelHeight() * level.getBlockSize() - displacement < j.getHeight()) {
+//                displacement = level.getLevelHeight() * level.getBlockSize() - displacement - j.getHeight();
+//            }
+//            for (IBlock b : level.getLevelBlocks()) {
+//                b.setY(b.getY() - character.getYspeed());
+//
+//            }
+//            for (Tile b : level.getLevelTiles()) {
+//                b.setY(b.getY() - character.getYspeed());
+//            }
+//            background.setY(background.getY() - character.getYspeed());
+//        }
 
         character.tetherMove();
         character.setXlocked(false);
         character.setYlocked(false);
         character.checkWindowBoundaries(j.getWidth(), j.getHeight());
-        character.checkBlockBoundaries(levelArray.get(currentLevel).getLevelBlocks());
+        character.checkBlockBoundaries(level.getLevelBlocks());
 
-        for (Mob c : levelArray.get(currentLevel).getLevelMobs()) {
+        for (Mob c : level.getLevelMobs()) {
             c.pattern();
             c.checkWindowBoundaries(j.getWidth(), j.getHeight());
-            c.checkBlockBoundaries(levelArray.get(currentLevel).getLevelBlocks());
+            c.checkBlockBoundaries(level.getLevelBlocks());
         }
 
         j.repaint();
@@ -229,6 +241,7 @@ public class GameLogic implements Runnable {
     public JPanel getJPanel() {
         return j;
     }
+
     class DisplayPanel extends JPanel {
         public void paintComponent(Graphics g) {
 
@@ -270,21 +283,22 @@ public class GameLogic implements Runnable {
         }
 
         private void drawingBackground(Graphics g) {
-            if (levelArray.get(currentLevel).getBackground().getImage().equals("sword-and-sworcery.png")) {
+            Tile background = levelArray.get(currentLevel).getBackground();
+            if (background.getImage().equals("sword-and-sworcery.png")) {
                 g.drawImage(BackgroundImages[0],
-                        levelArray.get(currentLevel).getBackground().getX(),
-                        levelArray.get(currentLevel).getBackground().getY(),
+                        background.getX(),
+                        background.getY(),
                         null);
             }
-            if (levelArray.get(currentLevel).getBackground().getImage().equals("windows_xp_bliss-wide.jpg"))
+            if (background.getImage().equals("windows_xp_bliss-wide.jpg"))
                 g.drawImage(BackgroundImages[1],
-                        levelArray.get(currentLevel).getBackground().getX(),
-                        levelArray.get(currentLevel).getBackground().getY(),
+                        background.getX(),
+                        background.getY(),
                         null);
-            if (levelArray.get(currentLevel).getBackground().getImage().equals("whiteBackground.png"))
+            if (background.getImage().equals("whiteBackground.png"))
                 g.drawImage(BackgroundImages[2],
-                        levelArray.get(currentLevel).getBackground().getX(),
-                        levelArray.get(currentLevel).getBackground().getY(),
+                        background.getX(),
+                        background.getY(),
                         null);
         }
 
@@ -340,22 +354,22 @@ public class GameLogic implements Runnable {
         }
 
         public void drawMainScreen(Graphics g) {
+            Level level = levelArray.get(currentLevel);
             g.drawImage(BackgroundImages[0],
-                    levelArray
-                            .get(currentLevel)
-                            .getBackground()
-                            .getX(),
-                    levelArray.get(currentLevel).getBackground().getY(),
+                    level.getBackground().getX(),
+                    level.getBackground().getY(),
                     null);
         }
 
         private void drawingGrapple(Graphics g) {
             if (character.getTethered()) {
                 g.setColor(Color.black);
-                g.drawLine(character.getX() + character.getWidth() / 2,
+                g.drawLine(
+                        character.getX() + character.getWidth() / 2,
                         character.getY() + character.getHeight() / 2,
                         character.getWeaponArray().get(0).getHitX(),
-                        character.getWeaponArray().get(0).getHitY());
+                        character.getWeaponArray().get(0).getHitY()
+                );
             }
         }
     }

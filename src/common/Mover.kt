@@ -6,15 +6,11 @@ import java.util.*
 
 open class Mover {
     var jumpable = 0
-
     var sprite: BufferedImage? = null
-
     val width: Int
         get() = sprite!!.width
-
     val height: Int
         get() = sprite!!.height
-
     protected var oldX: Int = 0
     protected var oldY: Int = 0
     var x: Int = 0
@@ -55,7 +51,6 @@ open class Mover {
             oldY = y
             y += yspeed
         }
-
         //friction
         for (i in xfriction downTo 1) {
             if (xspeed > 0) xspeed -= 1
@@ -116,10 +111,9 @@ open class Mover {
                         -1 -> collisionSouth(b)
                     }
                 }
-                if (xspeed > 0) {
-                    performCollisionHeadingRight(b)
-                } else if (xspeed < 0) {
-                    performCollisionHeadingLeft(b)
+                when {
+                    xspeed > 0 -> performCollisionHeadingRight(b)
+                    xspeed < 0 -> performCollisionHeadingLeft(b)
                 }
             }
         }
@@ -142,49 +136,38 @@ open class Mover {
     }
 
     private fun collisionSouthEast(b: IBlock) {
-        if (this.withinXparam(b)) {
-            collisionNorth(b)
-        } else if (this.withinYparam(b)) {
-            collisionEast(b)
-        } else if (xspeed > yspeed)
-            collisionNorth(b)
-        else {
-            collisionEast(b)
+        when {
+            this.withinXparam(b) -> collisionNorth(b)
+            this.withinYparam(b) -> collisionEast(b)
+            xspeed > yspeed -> collisionNorth(b)
+            else -> collisionEast(b)
         }
     }
 
     private fun collisionNorthEast(b: IBlock) {
-        if (this.withinXparam(b)) {
-            collisionSouth(b)
-        } else if (this.withinYparam(b)) {
-            collisionEast(b)
-        } else if (xspeed > yspeed) {
-            collisionSouth(b)
-        } else {
-            collisionEast(b)
+        when {
+            this.withinXparam(b) -> collisionSouth(b)
+            this.withinYparam(b) -> collisionEast(b)
+            xspeed > yspeed -> collisionSouth(b)
+            else -> collisionEast(b)
         }
     }
 
     private fun collisionSouthWest(b: IBlock) {
-        if (this.withinXparam(b)) {
-            collisionNorth(b)
-        } else if (this.withinYparam(b)) {
-            collisionWest(b)
-        } else if (-xspeed > yspeed) {
-            collisionNorth(b)
-        } else
-            collisionWest(b)
+        when {
+            this.withinXparam(b) -> collisionNorth(b)
+            this.withinYparam(b) -> collisionWest(b)
+            -xspeed > yspeed -> collisionNorth(b)
+            else -> collisionWest(b)
+        }
     }
 
     private fun collisionNorthWest(b: IBlock) {
-        if (this.withinXparam(b)) {
-            collisionSouth(b)
-        } else if (this.withinYparam(b)) {
-            collisionWest(b)
-        } else if (-xspeed > yspeed) {
-            collisionSouth(b)
-        } else {
-            collisionWest(b)
+        when {
+            this.withinXparam(b) -> collisionSouth(b)
+            this.withinYparam(b) -> collisionWest(b)
+            -xspeed > yspeed -> collisionSouth(b)
+            else -> collisionWest(b)
         }
     }
 
@@ -212,24 +195,26 @@ open class Mover {
     }
 
     private fun collisionNorth(b: IBlock) {
-        if (b.type == Block.Type.SLOW)
-            xspeed = xspeed / 3
+        if (b.type == Block.Type.SLOW) xspeed /= 3
         y = b.y - this.height
         yspeed = -yacc
         jumpable = 0
     }
 
     private fun withinXparam(b: IBlock): Boolean {
-        return b.x < oldX + this.width && oldX < b.x + b.width
+        val toLeftOfRightSide = b.x < oldX + this.width
+        val toRightOfLeftSide = oldX < b.x + b.width
+        return toLeftOfRightSide && toRightOfLeftSide
     }
 
     private fun withinYparam(b: IBlock): Boolean {
-        if (b.isPlatform)
-            return oldY + this.height - yacc < b.y
-                    && b.y < oldY + this.height
-        else
-            return b.y < oldY + this.height
-                    && oldY < b.y + b.height
+        val aboveBottomOfBlock = b.y < oldY + this.height
+        val belowTopOfBlock = if (b.isPlatform) {
+            oldY + this.height - yacc < b.y
+        } else {
+            oldY < b.y + b.height
+        }
+        return belowTopOfBlock && aboveBottomOfBlock
     }
 
     private fun yspeedSign(): Int {
