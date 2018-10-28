@@ -52,7 +52,7 @@ class KeyHandler implements KeyListener {
                 break;
 
             case KeyEvent.VK_L:
-                DisplayFrame.Companion.setLevelChanged(true);
+                Main.setLevelChanged(true);
                 break;
 //			case KeyEvent.VK_M:		if(musicOn){
 //										musicOn = false;

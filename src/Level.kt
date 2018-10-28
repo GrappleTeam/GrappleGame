@@ -1,5 +1,3 @@
-package levels
-
 import common.Block
 import common.Block.Type.*
 import common.IBlock
@@ -16,19 +14,15 @@ internal constructor(i: Int, val background: Tile, val currentSoundtrack: URL) {
     val levelBlocks: ArrayList<IBlock> = ArrayList()
     val levelTiles: ArrayList<Tile> = ArrayList()
     val levelMobs: ArrayList<Mob> = ArrayList()
-
     var tk = Toolkit.getDefaultToolkit()
     var xSize = tk.screenSize.getWidth().toInt()
     var ySize = tk.screenSize.getHeight().toInt()
-
     var blockSize: Int = 0
     var thisLevelNumber: Int = 0
         internal set
-
     var level = Array(ySize / 10) { CharArray(xSize / 10) }
     var levelWidth: Int = 0
     var levelHeight: Int = 0
-
 
     init {
         thisLevelNumber = i
@@ -44,7 +38,7 @@ internal constructor(i: Int, val background: Tile, val currentSoundtrack: URL) {
             3 -> initializeLevel(24, "Level3.txt")
             4 -> initializeLevel(24, "Level4.txt")
             5 -> initializeLevel(24, "Level5.txt")
-            else -> println("levels.Level error")
+            else -> println("Level error")
         }
     }
 
@@ -59,10 +53,8 @@ internal constructor(i: Int, val background: Tile, val currentSoundtrack: URL) {
     fun populateLevel(string: String) {
         var line: String? = null
         var currentline = 0
-        val stream = this.javaClass.getResourceAsStream(string)
-        val input = Scanner(stream)
+        val input = ResourceLoader.getTextResource(string)
         val temp = Array(70) { CharArray(70) }
-
         //filling a temporary array
         while (input.hasNextLine()) {
             line = input.nextLine()

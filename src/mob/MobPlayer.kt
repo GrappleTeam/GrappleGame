@@ -1,6 +1,6 @@
 package mob
 
-import resources.graphics.ImageUtils
+import ResourceLoader
 
 class MobPlayer internal constructor(
         damage: Int,
@@ -10,6 +10,6 @@ class MobPlayer internal constructor(
 ) : Mob("Player", damage, health, x, y) {
 
     init {
-        this.sprite = ImageUtils.getImage("girl10.png")
+        this.sprite = ResourceLoader.getImage("girl10.png")
     }
 }

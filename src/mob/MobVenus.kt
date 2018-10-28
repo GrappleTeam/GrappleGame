@@ -1,6 +1,6 @@
 package mob
 
-import resources.graphics.ImageUtils
+import ResourceLoader
 
 class MobVenus(
         name: String,
@@ -15,7 +15,7 @@ class MobVenus(
 //    private var health = 5
 
     init {
-        this.sprite = ImageUtils.getImage("Plant02.png")
+        this.sprite = ResourceLoader.getImage("Plant02.png")
     }
 
     internal constructor(x: Int, y: Int) : this("Venus", 0, 5, x, y)

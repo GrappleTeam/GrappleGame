@@ -27,12 +27,10 @@ open class Block(
     internal constructor(x: Int, y: Int, r: Block):
             this(x, y, r.width, r.height, r.type)
 
-    override fun withinBounds(testX: Int, testY: Int, testWidth: Int, testHeight: Int): Boolean {
-        return x < testX + testWidth
-                && testX < x + width
-                && y < testY + testHeight
-                && testY < y + height
-    }
+    override fun withinBounds(testX: Int, testY: Int, testWidth: Int, testHeight: Int): Boolean = (x < testX + testWidth
+            && testX < x + width
+            && y < testY + testHeight
+            && testY < y + height)
 
     enum class Type {
         DEATH, PLAIN, PLATFORM, PORTAL, SLOW

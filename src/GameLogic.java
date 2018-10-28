@@ -1,10 +1,8 @@
 import common.Block;
 import common.IBlock;
 import common.Tile;
-import levels.Level;
 import mob.Mob;
 import mob.MobPlayer;
-import resources.graphics.ImageUtils;
 import weapons.GrappleGun;
 
 import javax.swing.*;
@@ -42,26 +40,26 @@ public class GameLogic implements Runnable {
     //Image initialization
     BufferedImage window, background0, background1, characterImage, inputList;
     static BufferedImage[] blockImages = {
-            ImageUtils.getImage(new Block(0, 0, 0, 0, PLAIN).getImageString()),
-            ImageUtils.getImage(new Block(0, 0, 0, 0, DEATH).getImageString()),
-            ImageUtils.getImage(new Block(0, 0, 0, 0, SLOW).getImageString()),
-            ImageUtils.getImage(new Block(0, 0, 0, 0, PLATFORM).getImageString()),
-            ImageUtils.getImage(new Block(0, 0, 0, 0, PORTAL).getImageString()),
+            ResourceLoader.INSTANCE.getImage(new Block(0, 0, 0, 0, PLAIN).getImageString()),
+            ResourceLoader.INSTANCE.getImage(new Block(0, 0, 0, 0, DEATH).getImageString()),
+            ResourceLoader.INSTANCE.getImage(new Block(0, 0, 0, 0, SLOW).getImageString()),
+            ResourceLoader.INSTANCE.getImage(new Block(0, 0, 0, 0, PLATFORM).getImageString()),
+            ResourceLoader.INSTANCE.getImage(new Block(0, 0, 0, 0, PORTAL).getImageString()),
     };
     static BufferedImage[] tileImages = {
-            ImageUtils.getImage("Door01.png"),
-            ImageUtils.getImage("GrassBlock01.png"),
-            ImageUtils.getImage("CornerBlockTopRight.png"),
-            ImageUtils.getImage("CornerBlockTopLeft.png"),
-            ImageUtils.getImage("Horizontal.png"),
-            ImageUtils.getImage("CornerBlockBottomRight.png"),
-            ImageUtils.getImage("CornerBlockBottomLeft.png"),
-            ImageUtils.getImage("BottomHorizontal.png"),
+            ResourceLoader.INSTANCE.getImage("Door01.png"),
+            ResourceLoader.INSTANCE.getImage("GrassBlock01.png"),
+            ResourceLoader.INSTANCE.getImage("CornerBlockTopRight.png"),
+            ResourceLoader.INSTANCE.getImage("CornerBlockTopLeft.png"),
+            ResourceLoader.INSTANCE.getImage("Horizontal.png"),
+            ResourceLoader.INSTANCE.getImage("CornerBlockBottomRight.png"),
+            ResourceLoader.INSTANCE.getImage("CornerBlockBottomLeft.png"),
+            ResourceLoader.INSTANCE.getImage("BottomHorizontal.png"),
     };
     static BufferedImage[] BackgroundImages = {
-            ImageUtils.getImage("sword-and-sworcery.png"),
-            ImageUtils.getImage("windows_xp_bliss-wide.jpg"),
-            ImageUtils.getImage("whiteBackground.png"),
+            ResourceLoader.INSTANCE.getImage("sword-and-sworcery.png"),
+            ResourceLoader.INSTANCE.getImage("windows_xp_bliss-wide.jpg"),
+            ResourceLoader.INSTANCE.getImage("whiteBackground.png"),
     };
     //	//sound initialization
 //		AudioInputStream audioIn;
@@ -72,9 +70,9 @@ public class GameLogic implements Runnable {
     GameLogic() {
         j = new DisplayPanel();
         j.setPreferredSize(new Dimension(900, 600));
-        inputList = ImageUtils.getImage("InputList2.png");
-        soundtrack1 = this.getClass().getClassLoader().getResource("resources/sounds/Grapple - Main Menu Theme - 5-17-14, 10.57 PM.wav");
-        soundtrack2 = this.getClass().getClassLoader().getResource("resources/sounds/Grapple - City (Level 01) - 5-27-14, 2.52 AM.wav");
+        inputList = ResourceLoader.INSTANCE.getImage("InputList2.png");
+        soundtrack1 = ResourceLoader.INSTANCE.getSoundUrl("Grapple - Main Menu Theme - 5-17-14, 10.57 PM.wav");
+        soundtrack2 = ResourceLoader.INSTANCE.getSoundUrl("Grapple - City (Level 01) - 5-27-14, 2.52 AM.wav");
 
         currentLevel = 0;
         levelArray = new ArrayList<>();
@@ -125,10 +123,10 @@ public class GameLogic implements Runnable {
     public void run() {
 
         character.setXacc(0);
-        if (DisplayFrame.Companion.getLevelChanged()) {
+        if (Main.getLevelChanged()) {
             changeLevel();
         }
-        DisplayFrame.Companion.setLevelChanged(false);
+        Main.setLevelChanged(false);
 
         processInput();
 
@@ -265,7 +263,7 @@ public class GameLogic implements Runnable {
             drawingMobs(g);
             drawingGrapple(g);
             drawingAimingCircle(g);
-            //g.drawImage(testanimation[cycle%testanimation.length], 40, 40, this);
+            //gameLogic.drawImage(testanimation[cycle%testanimation.length], 40, 40, this);
         }
 
         private void drawingAimingCircle(Graphics g) {

@@ -1,6 +1,5 @@
 package common
 
-import DisplayFrame
 import java.awt.image.BufferedImage
 import java.util.*
 
@@ -104,7 +103,7 @@ open class Mover {
             //only check the block if the character is inside it.
             if (b.withinBounds(x, y, width, height)) {
                 if (b.type == Block.Type.PORTAL)
-                    DisplayFrame.levelChanged = true
+                    Main.levelChanged = true
                 if (xspeed == 0) {
                     when (yspeedSign()) {
                         1 -> collisionNorth(b)

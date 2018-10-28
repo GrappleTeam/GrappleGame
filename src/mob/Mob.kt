@@ -11,7 +11,7 @@ open class Mob(
         x: Int,
         y: Int
 ) : Mover() {
-    private val jumpsound = this.javaClass.getResource("resources/sounds/Jump Sound 3 quieter.wav")
+    private val jumpsound = this.javaClass.getResource("assets/sounds/Jump Sound 3 quieter.wav")
     var state = 0
     var jumpHeight = 7
     var weaponArray = ArrayList<Weapon>()

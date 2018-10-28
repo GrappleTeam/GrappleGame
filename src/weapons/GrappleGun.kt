@@ -25,7 +25,7 @@ class GrappleGun : Weapon {
         reloading = false
 
         //		try {
-        //			gunImage = ImageIO.read(DisplayPanel.class.getResource("/src/resources.Enemy1.png"));
+        //			gunImage = ImageIO.read(DisplayPanel.class.getResource("/src/assets.Enemy1.png"));
         //		} catch (IOException e) {
         //			e.printStackTrace();
         //		}

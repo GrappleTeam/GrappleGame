@@ -1,6 +1,6 @@
 package mob
 
-import resources.graphics.ImageUtils
+import ResourceLoader
 
 class MobChuChu(
         name: String,
@@ -14,7 +14,7 @@ class MobChuChu(
     private var tic = 0
 
     init {
-        this.sprite = ImageUtils.getImage("Sprout01.png")
+        this.sprite = ResourceLoader.getImage("Sprout01.png")
     }
 
     internal constructor(x: Int, y: Int) : this("ChuChu", damage, 5, x, y)
