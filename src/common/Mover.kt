@@ -98,7 +98,7 @@ open class Mover {
         }
     }
 
-    fun checkBlockBoundaries(blocks: ArrayList<IBlock>) {
+    fun checkBlockBoundaries(blocks: List<IBlock>) {
         for (b in blocks) {
             //only check the block if the character is inside it.
             if (b.withinBounds(x, y, width, height)) {

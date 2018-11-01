@@ -1,25 +1,27 @@
-import GameLogic.gamestate.*
+import GameLogic.Gamestate.GAMEPLAY_SCREEN
+import GameLogic.Gamestate.MAIN_SCREEN
+import GameLogic.Gamestate.TITLE_SCREEN
 import common.Block
 import common.IBlock
-import common.Tile
-import javax.swing.*
-import java.awt.*
+import common.ITile
+import java.awt.Color
+import java.awt.Graphics
+import javax.swing.JPanel
 
-internal class DisplayPanel : JPanel() {
+class DisplayPanel : JPanel() {
     public override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
         when (GameLogic.current_gamestate) {
-            main_screen -> drawMainScreen(g)
-            gameplay_screen -> drawGameScreen(g)
-            title_screen -> TODO()
+            MAIN_SCREEN -> drawMainScreen(g)
+            GAMEPLAY_SCREEN -> drawGameScreen(g)
+            TITLE_SCREEN -> TODO()
         }
     }
 
-    fun drawGameScreen(g: Graphics) {
+    private fun drawGameScreen(g: Graphics) {
         drawingBackground(g)
         drawingTiles(g)
-        drawingBlocks(g)
         drawingCharacter(g)
         drawingMobs(g)
         drawingGrapple(g)
@@ -41,9 +43,9 @@ internal class DisplayPanel : JPanel() {
     private fun drawingBackground(g: Graphics) {
         val background = GameLogic.levelArray[GameLogic.currentLevel].background
         when (background.image) {
-            "sword-and-sworcery.png" -> g.drawImage(GameLogic.BackgroundImages[0], background.x, background.y, null)
-            "windows_xp_bliss-wide.jpg" -> g.drawImage(GameLogic.BackgroundImages[1], background.x, background.y, null)
-            "whiteBackground.png" -> g.drawImage(GameLogic.BackgroundImages[2], background.x, background.y, null)
+            "sword-and-sworcery.png" -> g.drawImage(backgroundImages[0], background.x, background.y, null)
+            "windows_xp_bliss-wide.jpg" -> g.drawImage(backgroundImages[1], background.x, background.y, null)
+            "whiteBackground.png" -> g.drawImage(backgroundImages[2], background.x, background.y, null)
         }
     }
 
@@ -67,35 +69,15 @@ internal class DisplayPanel : JPanel() {
         g.drawImage(GameLogic.character.sprite, GameLogic.character.x, GameLogic.character.y, this)
     }
 
-    private fun drawingBlocks(g: Graphics) {
-        fun draw(it: IBlock, index: Int) {
-            g.drawImage(GameLogic.blockImages[index], it.x, it.y, this)
-        }
-        GameLogic.levelArray[GameLogic.currentLevel].levelBlocks.forEach {
-            when (it.type) {
-                Block.Type.PLAIN -> draw(it, 0)
-                Block.Type.DEATH -> draw(it, 1)
-                Block.Type.SLOW -> draw(it, 2)
-                Block.Type.PLATFORM -> draw(it, 3)
-                Block.Type.PORTAL -> draw(it, 4)
-            }
-        }
-    }
-
     private fun drawingTiles(g: Graphics) {
-        fun draw(it: Tile, index: Int) {
-            g.drawImage(GameLogic.tileImages[index], it.x, it.y, this)
+        fun draw(tile: ITile, index: String) {
+            g.drawImage(images[index]?.value, tile.x, tile.y, this)
         }
         GameLogic.levelArray[GameLogic.currentLevel].levelTiles.forEach {
-            when (it.image) {
-                "door" -> draw(it, 0)
-                "grass" -> draw(it, 1)
-                "topright" -> draw(it, 2)
-                "topleft" -> draw(it, 3)
-                "horizontal" -> draw(it, 4)
-                "bottomright" -> draw(it, 5)
-                "bottomleft" -> draw(it, 6)
-                "bottomhorizontal" -> draw(it, 7)
+            if (it is IBlock) {
+                draw(it, it.type.toString())
+            } else {
+                draw(it, it.image!!)
             }
         }
     }
@@ -103,7 +85,7 @@ internal class DisplayPanel : JPanel() {
     private fun drawMainScreen(g: Graphics) {
         val level = GameLogic.levelArray[GameLogic.currentLevel]
         g.drawImage(
-                GameLogic.BackgroundImages[0],
+                backgroundImages[0],
                 level.background.x,
                 level.background.y,
                 null
@@ -121,4 +103,28 @@ internal class DisplayPanel : JPanel() {
             )
         }
     }
+
+    companion object {
+        var images = mapOf(
+                Block.Type.PLAIN.toString() to lazy { ResourceLoader.getImage(Block(0, 0, 0, 0, Block.Type.PLAIN).image!!) },
+                Block.Type.DEATH.toString() to lazy { ResourceLoader.getImage(Block(0, 0, 0, 0, Block.Type.DEATH).image!!) },
+                Block.Type.SLOW.toString() to lazy { ResourceLoader.getImage(Block(0, 0, 0, 0, Block.Type.SLOW).image!!) },
+                Block.Type.PLATFORM.toString() to lazy { ResourceLoader.getImage(Block(0, 0, 0, 0, Block.Type.PLATFORM).image!!) },
+                Block.Type.PORTAL.toString() to lazy { ResourceLoader.getImage(Block(0, 0, 0, 0, Block.Type.PORTAL).image!!) },
+                "door" to lazy { ResourceLoader.getImage("Door01.png") },
+                "grass" to lazy { ResourceLoader.getImage("GrassBlock01.png") },
+                "topright" to lazy { ResourceLoader.getImage("CornerBlockTopRight.png") },
+                "topleft" to lazy { ResourceLoader.getImage("CornerBlockTopLeft.png") },
+                "horizontal" to lazy { ResourceLoader.getImage("Horizontal.png") },
+                "bottomright" to lazy { ResourceLoader.getImage("CornerBlockBottomRight.png") },
+                "bottomleft" to lazy { ResourceLoader.getImage("CornerBlockBottomLeft.png") },
+                "bottomhorizontal" to lazy { ResourceLoader.getImage("BottomHorizontal.png") }
+        )
+        var backgroundImages = arrayOf(
+                ResourceLoader.getImage("sword-and-sworcery.png"),
+                ResourceLoader.getImage("windows_xp_bliss-wide.jpg"),
+                ResourceLoader.getImage("whiteBackground.png")
+        )
+    }
 }
+

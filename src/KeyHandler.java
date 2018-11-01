@@ -16,28 +16,28 @@ class KeyHandler implements KeyListener {
 
             case KeyEvent.VK_W:        //-------------
             case KeyEvent.VK_UP:
-                gameLogic.upButtonPressed = true;
+                gameLogic.setUpButtonPressed(true);
                 break;
 
             case KeyEvent.VK_A:        //-------------
             case KeyEvent.VK_LEFT:
-                gameLogic.leftButtonPressed = true;
+                gameLogic.setLeftButtonPressed(true);
                 break;
 
             case KeyEvent.VK_D:        //-------------
             case KeyEvent.VK_RIGHT:
-                gameLogic.rightButtonPressed = true;
+                gameLogic.setRightButtonPressed(true);
                 break;
 
             case KeyEvent.VK_S:        //-------------
             case KeyEvent.VK_DOWN:
-                gameLogic.downButtonPressed = true;
+                gameLogic.setDownButtonPressed(true);
                 break;
 
             case KeyEvent.VK_SPACE:
-                GameLogic.character.setX(GameLogic.character.getWeaponArray().get(0).getHitX());
-                GameLogic.character.setY(GameLogic.character.getWeaponArray().get(0).getHitY());
-                GameLogic.character.setYspeed(0);
+                GameLogic.Companion.getCharacter().setX(GameLogic.Companion.getCharacter().getWeaponArray().get(0).getHitX());
+                GameLogic.Companion.getCharacter().setY(GameLogic.Companion.getCharacter().getWeaponArray().get(0).getHitY());
+                GameLogic.Companion.getCharacter().setYspeed(0);
                 break;
 
             case KeyEvent.VK_ESCAPE:
@@ -45,10 +45,10 @@ class KeyHandler implements KeyListener {
                 System.exit(0);
 
             case KeyEvent.VK_T:
-                if (GameLogic.current_gamestate == GameLogic.gamestate.main_screen)
-                    GameLogic.current_gamestate = GameLogic.gamestate.gameplay_screen;
-                else if (GameLogic.current_gamestate == GameLogic.gamestate.gameplay_screen)
-                    GameLogic.current_gamestate = GameLogic.gamestate.main_screen;
+                if (GameLogic.Companion.getCurrent_gamestate() == GameLogic.Gamestate.MAIN_SCREEN)
+                    GameLogic.Companion.setCurrent_gamestate(GameLogic.Gamestate.GAMEPLAY_SCREEN);
+                else if (GameLogic.Companion.getCurrent_gamestate() == GameLogic.Gamestate.GAMEPLAY_SCREEN)
+                    GameLogic.Companion.setCurrent_gamestate(GameLogic.Gamestate.MAIN_SCREEN);
                 break;
 
             case KeyEvent.VK_L:
@@ -75,24 +75,24 @@ class KeyHandler implements KeyListener {
 
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
-                gameLogic.upButtonPressed = false;
+                gameLogic.setUpButtonPressed(false);
                 break;
 
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
-                gameLogic.leftButtonPressed = false;
-                GameLogic.character.setXacc(0);
+                gameLogic.setLeftButtonPressed(false);
+                GameLogic.Companion.getCharacter().setXacc(0);
                 break;
 
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT:
-                gameLogic.rightButtonPressed = false;
-                GameLogic.character.setXacc(0);
+                gameLogic.setRightButtonPressed(false);
+                GameLogic.Companion.getCharacter().setXacc(0);
                 break;
 
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
-                gameLogic.downButtonPressed = false;
+                gameLogic.setDownButtonPressed(false);
                 break;
             default:
                 break;

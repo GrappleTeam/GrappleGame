@@ -10,7 +10,7 @@ object Main {
         j.apply {
             //		j.setExtendedState(JFrame.MAXIMIZED_BOTH);
             isUndecorated = true
-            add(gameLogic.jPanel)
+            add(gameLogic.j)
             addMouseListener(MouseHandler())
             addMouseMotionListener(MouseMotionHandler())
             addKeyListener(KeyHandler(gameLogic))

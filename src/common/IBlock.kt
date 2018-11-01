@@ -1,12 +1,9 @@
 package common
 
-interface IBlock {
+interface IBlock : ITile {
     val type: Block.Type
-    var x: Int
-    var y: Int
     var width: Int
     var height: Int
-    val imageString: String
     val isPlatform: Boolean
     fun withinBounds(
             testX: Int,
@@ -14,5 +11,4 @@ interface IBlock {
             testWidth: Int,
             testHeight: Int
     ): Boolean
-
 }

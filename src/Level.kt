@@ -1,32 +1,27 @@
 import common.Block
 import common.Block.Type.*
 import common.IBlock
+import common.ITile
 import common.Tile
 import mob.Mob
 import mob.MobChuChu
 import mob.MobVenus
 import java.awt.Toolkit
-import java.net.URL
 import java.util.*
 
-class Level//Constructor
-internal constructor(i: Int, val background: Tile, val currentSoundtrack: URL) {
-    val levelBlocks: ArrayList<IBlock> = ArrayList()
-    val levelTiles: ArrayList<Tile> = ArrayList()
+class Level internal constructor(val levelNumber: Int, val background: Tile) {
+    val levelTiles: ArrayList<ITile> = ArrayList()
     val levelMobs: ArrayList<Mob> = ArrayList()
     var tk = Toolkit.getDefaultToolkit()
     var xSize = tk.screenSize.getWidth().toInt()
     var ySize = tk.screenSize.getHeight().toInt()
     var blockSize: Int = 0
-    var thisLevelNumber: Int = 0
-        internal set
     var level = Array(ySize / 10) { CharArray(xSize / 10) }
     var levelWidth: Int = 0
     var levelHeight: Int = 0
 
     init {
-        thisLevelNumber = i
-        when (i) {
+        when (levelNumber) {
             0 -> {
                 initializeLevel(24, "Level0.txt")
                 //adding enemies to the array
@@ -77,7 +72,7 @@ internal constructor(i: Int, val background: Tile, val currentSoundtrack: URL) {
 
     fun addBlocksAndTiles(height: Int, width: Int) {
         val addBlock = { x: Int, y: Int, type: Block.Type ->
-            levelBlocks.add(Block(blockSize * x, ySize - blockSize * (y + 1), blockSize, blockSize, type))
+            levelTiles.add(Block(blockSize * x, ySize - blockSize * (y + 1), blockSize, blockSize, type))
         }
         val addTile = { x: Int, y: Int, image: String? ->
             levelTiles.add(Tile(blockSize * x, ySize - blockSize * (y + 1), image))
